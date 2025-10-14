@@ -3,12 +3,14 @@ import logging
 from aiogram import Bot, Dispatcher
 from config import Config
 from handlers import start, events
+from db import Database
 
 async def main():
     logging.basicConfig(level=logging.INFO)
     
     bot = Bot(token=Config.BOT_TOKEN)
     dp = Dispatcher()
+    db = Database()
     
     
     dp.include_router(start.router)
