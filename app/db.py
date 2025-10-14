@@ -40,6 +40,7 @@ class Database:
                         user_id INTEGER NOT NULL,
                         type TEXT NOT NULL,
                         text TEXT,
+                        duration_days INTEGER DEFAULT 14,
                         media_paths TEXT,
                         status TEXT DEFAULT 'pending',
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -218,7 +219,7 @@ class Database:
 
     # ===== REQUEST FUNCTIONS =====
 
-    def add_request(self, user_id: int, request_type: str, text: str = None, 
+    def add_request(self, user_id: int, request_type: str, duration_days: int, text: str = None,
                    media_paths = None, status: str = 'pending'):
         """Добавление новой заявки"""
         try:
@@ -229,9 +230,9 @@ class Database:
                 media_json = json.dumps(media_paths) if media_paths else None
                 
                 cursor.execute('''
-                    INSERT INTO requests (user_id, type, text, media_paths, status)
-                    VALUES (?, ?, ?, ?, ?)
-                ''', (user_id, request_type, text, media_json, status))
+                    INSERT INTO requests (user_id, type, text, duration_days, media_paths, status)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                ''', (user_id, request_type, duration_days, text, media_json, status))
                 
                 conn.commit()
                 return cursor.lastrowid
@@ -335,13 +336,14 @@ class Database:
                         'user_id': row[1],
                         'type': row[2],
                         'text': row[3],
-                        'media_paths': json.loads(row[4]) if row[4] else [],
-                        'status': row[5],
-                        'created_at': row[6],
-                        'updated_at': row[7],
-                        'user_tg_id': row[8],
-                        'user_username': row[9],
-                        'user_full_name': row[10]
+                        'duration_days': row[4],
+                        'media_paths': json.loads(row[5]) if row[5] else [],
+                        'status': row[6],
+                        'created_at': row[7],
+                        'updated_at': row[8],
+                        'user_tg_id': row[9],
+                        'user_username': row[10],
+                        'user_full_name': row[11]
                     }
                     for row in cursor.fetchall()
                 ]
@@ -373,13 +375,14 @@ class Database:
                         'user_id': row[1],
                         'type': row[2],
                         'text': row[3],
-                        'media_paths': json.loads(row[4]) if row[4] else [],
-                        'status': row[5],
-                        'created_at': row[6],
-                        'updated_at': row[7],
-                        'user_tg_id': row[8],
-                        'user_username': row[9],
-                        'user_full_name': row[10]
+                        'duration_days': row[4],
+                        'media_paths': json.loads(row[5]) if row[5] else [],
+                        'status': row[6],
+                        'created_at': row[7],
+                        'updated_at': row[8],
+                        'user_tg_id': row[9],
+                        'user_username': row[10],
+                        'user_full_name': row[11]
                     }
                     for row in cursor.fetchall()
                 ]
