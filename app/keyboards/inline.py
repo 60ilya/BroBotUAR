@@ -37,3 +37,15 @@ def events_month_request():
         [InlineKeyboardButton(text='🔙 Назад', callback_data='events'),
          InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
     ])
+    
+def events_month_request(is_monthly: bool = False):
+    """Клавиатура с toggle кнопкой для выбора длительности"""
+    toggle_text = "✅ Афиша месяца (30 дней)" if is_monthly else "✅ Афиша недели (14 дней)"
+    
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=toggle_text, callback_data="events_duration")],
+        [
+            InlineKeyboardButton(text='🔙 Назад', callback_data='events'),
+            InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')
+        ]
+    ])
