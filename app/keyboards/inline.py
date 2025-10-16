@@ -49,3 +49,15 @@ def events_month_request(is_monthly: bool = False):
             InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')
         ]
     ])
+    
+    
+def routes_menu(notification: bool = False):
+    if notification:
+        notification_text = "✅ Ждем уведомления"
+    else:
+        notification_text = "🔔 Хочу уведомление о запуске"
+    
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=notification_text, callback_data="routes_notification")],
+        [InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
