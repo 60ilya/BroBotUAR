@@ -11,7 +11,7 @@ def start_menu():
         [InlineKeyboardButton(text='Афиша событий', callback_data='events'),
          InlineKeyboardButton(text='Конструктор маршрута', callback_data='routes')],
         [InlineKeyboardButton(text='Жилье и недвижимость', callback_data='housing'),
-         InlineKeyboardButton(text='Транспорт и аренда', callback_data='transportRent')],
+         InlineKeyboardButton(text='Транспорт и аренда', callback_data='transport')],
         [InlineKeyboardButton(text='Объявления и услуги', callback_data='adsServices'),
          InlineKeyboardButton(text='Полезные контакты и поддержка', callback_data='contacts')]
     ])
@@ -72,7 +72,6 @@ def housing_menu_ikb():
     ])
     
 def housing_rent_ikb(text_template):
-    
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='Копировать шаблон', copy_text=CopyTextButton(text=text_template))],
         [InlineKeyboardButton(text='🔙 Назад', callback_data='housing'),
@@ -80,8 +79,48 @@ def housing_rent_ikb(text_template):
     ])
     
 def housing_request_ikb():
-    
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='🔙 Назад', callback_data='housing'),
+        InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def transport_menu_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='🚘 Смотреть каталог', callback_data='transport_catalog')],
+        [InlineKeyboardButton(text='Купить автомобиль', url='https://t.me/adelsuprun'),
+         InlineKeyboardButton(text='Оставить отзыв', url='https://t.me/adelsuprun')],
+        [InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def transport_catalog_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Сайт-агрегатор', callback_data='transport_agregator'),
+         InlineKeyboardButton(text='Местные партнеры', callback_data='transport_partners')],
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='transport'),
+        InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def transport_partners_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Партнер 1', callback_data='transport_partner_1'),
+         InlineKeyboardButton(text='Партнер 2', callback_data='transport_partner_2')],
+        [InlineKeyboardButton(text='Партнер 3', callback_data='transport_partner_3'),
+         InlineKeyboardButton(text='Партнер 4', callback_data='transport_partner_4')],
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='transport'),
+        InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def transport_agregator_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='TRIP.COM - транспорт', url='https://www.trip.com/t/AHvHi7zZqR2')],
+        [InlineKeyboardButton(text='TRIP.COM - главная', url='https://www.trip.com/t/FVnSCs0aqR2')],
+        [InlineKeyboardButton(text='TRIP.COM - трансфер', url='https://www.trip.com/t/AZXPqE3aqR2')],
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='transport'),
+        InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def transport_request_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='transport'),
         InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
     ])
