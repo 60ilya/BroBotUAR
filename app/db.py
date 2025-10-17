@@ -166,6 +166,21 @@ class Database:
         except Exception as e:
             logging.error(f"Error setting user admin: {e}")
             return False
+        
+    def set_user_notification(self, tg_id: int, notification: bool = True) -> bool:
+        """Получение уведомлений"""
+        try:
+            with self.get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute('''
+                    UPDATE users SET notifications = ?, updated_at = CURRENT_TIMESTAMP 
+                    WHERE tg_id = ?
+                ''', (notification, tg_id))
+                conn.commit()
+                return cursor.rowcount > 0
+        except Exception as e:
+            logging.error(f"Error setting user notification: {e}")
+            return False
 
     def get_all_admins(self):
         """Получение всех администраторов"""

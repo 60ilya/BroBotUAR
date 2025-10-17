@@ -2,7 +2,7 @@ import asyncio
 import logging
 from aiogram import Bot, Dispatcher
 from config import Config
-from handlers import start, events
+from handlers import start, events, routes, housing
 from db import Database
 
 async def main():
@@ -10,11 +10,13 @@ async def main():
     
     bot = Bot(token=Config.BOT_TOKEN)
     dp = Dispatcher()
-    db = Database()
+    Database()
     
     
     dp.include_router(start.router)
     dp.include_router(events.router)
+    dp.include_router(routes.router)
+    dp.include_router(housing.router)
 
     
     await dp.start_polling(bot)
