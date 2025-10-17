@@ -1,4 +1,4 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CopyTextButton
 
 def back_start_menu():
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -60,4 +60,28 @@ def routes_menu(notification: bool = False):
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=notification_text, callback_data="routes_notification")],
         [InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+
+
+def housing_menu_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='🏡 Посмотреть объявления', url='https://t.me/+DNgqJjmx55A1YjYy')],
+        [InlineKeyboardButton(text='➕ Подать объявление', callback_data='housing_request'),
+         InlineKeyboardButton(text='💰 Продажа/покупка', callback_data='housing_rent')],
+        [InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def housing_rent_ikb(text_template):
+    
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Копировать шаблон', copy_text=CopyTextButton(text=text_template))],
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='housing'),
+        InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def housing_request_ikb():
+    
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='housing'),
+        InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
     ])
