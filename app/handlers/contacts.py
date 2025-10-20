@@ -13,10 +13,17 @@ db = Database()
 async def contacts_menu(callback: types.CallbackQuery):
     text = """📄 Полезные контакты и поддержка"""
     
-    await callback.message.edit_text(
-        text,
-        reply_markup=contacts_menu_ikb(),
-        parse_mode="HTML")
+    try:
+        await callback.message.edit_text(
+            text,
+            reply_markup=contacts_menu_ikb(),
+            parse_mode="HTML")
+    except:
+        await callback.message.delete()
+        await callback.message.answer(
+            text,
+            reply_markup=contacts_menu_ikb(),
+            parse_mode="HTML")
     
   
 @router.callback_query(F.data == 'contacts_exchange')
@@ -44,11 +51,17 @@ async def contacts_exchange(callback: types.CallbackQuery):
 
 <b>👾 Отзывы - @conexus_crypto_reviews</b>"""
 
-    
-    await callback.message.edit_text(
-        text=text,
-        reply_markup=contacts_exchange_ikb(),
-        parse_mode="HTML")
+    try:
+        await callback.message.edit_text(
+            text=text,
+            reply_markup=contacts_exchange_ikb(),
+            parse_mode="HTML")
+    except:
+        await callback.message.delete()
+        await callback.message.answer(
+            text=text,
+            reply_markup=contacts_exchange_ikb(),
+            parse_mode="HTML")
     
 @router.callback_query(F.data == 'contacts_visa')
 async def contacts_visa(callback: types.CallbackQuery):
@@ -70,8 +83,10 @@ async def contacts_visa(callback: types.CallbackQuery):
 Спокойно. Надежно. Профессионально."""
 
     
-    await callback.message.edit_text(
-        text=text,
+    await callback.message.delete()
+    await callback.message.answer_video(
+        caption=text,
+        video=types.FSInputFile('app/content/conexus.mp4'),
         reply_markup=contacts_exchange_ikb(),
         parse_mode="HTML")
 
@@ -82,7 +97,49 @@ async def contacts_lie(callback: types.CallbackQuery):
 По возможности приложите скрины, сообщения или записи разговоров."""
 
     
-    await callback.message.edit_text(
-        text=text,
+    try:
+        await callback.message.edit_text(
+            text=text,
+            reply_markup=contacts_exchange_ikb(),
+            parse_mode="HTML")
+    except:
+        await callback.message.delete()
+        await callback.message.answer(
+            text=text,
+            reply_markup=contacts_exchange_ikb(),
+            parse_mode="HTML")
+    
+@router.callback_query(F.data == 'contacts_card')
+async def contacts_card(callback: types.CallbackQuery):
+    
+    text = f"""
+<b>Международная карта для путешествий</b>
+
+- Пластиковая 
+- Оформление без доверенности 
+- Оформляется за 2 дня 
+- Обслуживание — бесплатно 
+- Именная или нет — на выбор 
+- Привязывается к РФ номеру 
+- Пополнение рублями через СБП 
+
+*Доставка по всему миру промокод "<b>КЕЙПТАУН</b>" скидка 1 000RUB
+
+Путешествуйте с комфортом, <b>КРЯ</b>
+
+<b>Отзывы</b> @oplataguruproofs"""
+
+    # Все фото группой (только к первому текст)
+    media = [
+        types.InputMediaPhoto(
+            media=types.FSInputFile(f"app/content/contacts_{i}.jpg")
+        ) for i in range(1, 4)
+    ]
+    await callback.message.answer_media_group(media=media)
+    
+    # Клавиатура отдельным сообщением
+    await callback.message.answer(
+        text,
         reply_markup=contacts_exchange_ikb(),
-        parse_mode="HTML")
+        parse_mode="HTML"
+    )
