@@ -1,0 +1,88 @@
+import logging
+from aiogram import Router, types, F, Bot
+from aiogram.fsm.state import State, StatesGroup
+from aiogram.fsm.context import FSMContext
+from config import Config
+from db import Database
+from keyboards.inline import contacts_menu_ikb, contacts_exchange_ikb
+
+router = Router()
+db = Database()
+
+@router.callback_query(F.data == 'contacts')
+async def contacts_menu(callback: types.CallbackQuery):
+    text = """📄 Полезные контакты и поддержка"""
+    
+    await callback.message.edit_text(
+        text,
+        reply_markup=contacts_menu_ikb(),
+        parse_mode="HTML")
+    
+  
+@router.callback_query(F.data == 'contacts_exchange')
+async def contacts_exchange(callback: types.CallbackQuery):
+    
+    text = f"""
+<b>💱 Обменный сервис, условия обмена:</b>
+
+<b>Обмен валют:</b> USD, RUB, ZAR, EUR, NAD и другие 
+<b>Обмен криптовалют:</b> USDT, BTC, ETH и другие
+
+📍 Кейптаун и Йоханнесбург
+
+<b>Преимущества:</b>
+- Офис в центре города или доставим к вам
+- Сопровождение сделок по покупке недвижимости 
+- Оплата: счетов, услуг, авиабилетов, отелей, аренда и покупка машин, онлайн покупки, Airbnb
+- Денежные переводы, выдача и принятие наличных <b>по всему миру</b>
+<i>*Скидка при переводах от 10 000$</i>
+
+Всегда <b>выгодные курсы</b> и отличный сервис
+Узнать курс у менеджера <b>@conexuscrypto_manager</b>
+Офис: <b>Google Maps</b> 📍
+Режим работы 9:00 - 18:00
+
+<b>👾 Отзывы - @conexus_crypto_reviews</b>"""
+
+    
+    await callback.message.edit_text(
+        text=text,
+        reply_markup=contacts_exchange_ikb(),
+        parse_mode="HTML")
+    
+@router.callback_query(F.data == 'contacts_visa')
+async def contacts_visa(callback: types.CallbackQuery):
+    
+    text = f"""
+🇿🇦 Визы и Юридические услуги | <b>Планируете жить в Кейптауне на постоянной основе?
+
+Нужна виза срочно? </b>
+<i>используйте наш VIP-сервис — даем гарантию на получение визы в течение 3 месяцев</i>
+
+⚡️ Туристические, партнёрские, студенческие, рабочие и бизнес-визы 
+⚡️ Сопровождение от консультации до получения визы 
+⚡️ Переводы, апостили, письма, стратегия подачи  
+
+📍 <b>Офис в Кейптауне</b> | 37 Buitenkant St, 7925
+🚩 <b>Telegram:</b> +27772632159 @yulia_concierge_attorney 
+🌐 Наш сайт (https://concierge-attorneys.co.za/)
+
+Спокойно. Надежно. Профессионально."""
+
+    
+    await callback.message.edit_text(
+        text=text,
+        reply_markup=contacts_exchange_ikb(),
+        parse_mode="HTML")
+
+@router.callback_query(F.data == 'contacts_lie')
+async def contacts_lie(callback: types.CallbackQuery):
+    
+    text = f"""Опишите подробно свою ситуацию сообщением @adelsuprun
+По возможности приложите скрины, сообщения или записи разговоров."""
+
+    
+    await callback.message.edit_text(
+        text=text,
+        reply_markup=contacts_exchange_ikb(),
+        parse_mode="HTML")

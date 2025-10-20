@@ -4,7 +4,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from config import Config
 from db import Database
-from keyboards.inline import events_menu, events_month_menu, events_month_request, back_start_menu, events_month_request
+from keyboards.inline import events_menu, events_month_menu, events_month_request, back_start_menu, events_month_request, events_request_ikb
 
 router = Router()
 db = Database()
@@ -20,16 +20,14 @@ async def cmd_start(callback: types.CallbackQuery):
         parse_mode="HTML")
     
 @router.callback_query(F.data == 'events_month')
-async def events_month(callback: types.CallbackQuery, bot: Bot):
-    channel_username = "@capetown_uar"
-    pin_url = await get_pinned_message_url(bot, channel_username)
+async def events_month(callback: types.CallbackQuery):
     
     await callback.message.edit_text(
         "🎟 <b>Афиша Кейптауна — всё самое интересное этого месяца!</b>\n"
         "🌴 Фестивали, вечеринки, маркеты, выставки, концерты и новые места — я собираю для тебя всё, что стоит внимания.\n\n"
         "💡 <b>События этой недели</b> обновляется каждую неделю, чтобы всегда быть в курсе,"
         " <b>куда пойти в выходные, где поесть вкусно, а где потанцевать до утра.</b>",
-        reply_markup=events_month_menu(pin_url),
+        reply_markup=events_month_menu(),
         parse_mode="HTML")
     
 async def get_pinned_message_url(bot: Bot, channel_username: str) -> str:
@@ -50,6 +48,18 @@ async def get_pinned_message_url(bot: Bot, channel_username: str) -> str:
     
 @router.callback_query(F.data == 'events_request')
 async def events_request(callback: types.CallbackQuery, state: FSMContext):
+    request = db.check_recent_request_by_tg_id(
+        tg_id=callback.from_user.id, 
+        request_type="events"
+    )
+    
+    if request['exists']:
+        await callback.message.edit_text(
+            f"Вы уже отправляли заявку за эти 2 недели. Следующую заявку вы сможете подать через {request['time_remaining']}",
+            reply_markup=events_request_ikb(),
+            parse_mode="HTML")
+        return
+    
     await state.set_state(EventStates.waiting_for_event_data)
     
     # Инициализируем состояние с выбором длительности по умолчанию
@@ -98,7 +108,7 @@ async def handle_toggle_duration(callback: types.CallbackQuery, state: FSMContex
     )
     
     # Показываем подсказку о изменении
-    duration_text = "30 дней (Афиша месяца)" if new_is_monthly else "14 дней (Афиша недели)"
+    duration_text = "30 дней" if new_is_monthly else "14 дней"
     await callback.answer(f"Установлена длительность: {duration_text}")
     
 # Обработчик текстового сообщения с данными мероприятия

@@ -2,6 +2,7 @@ import logging
 from aiogram import Router, types, F, Bot
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
+from aiogram.types import FSInputFile
 from config import Config
 from db import Database
 from keyboards.inline import transport_menu_ikb, transport_catalog_ikb, transport_partners_ikb, transport_agregator_ikb, back_start_menu, transport_request_ikb
@@ -29,12 +30,20 @@ async def transport_menu(callback: types.CallbackQuery):
 
 <i>*Скидка суммируется со скидкой партнера</i>"""
 
-    
-    await callback.message.edit_text(
-        text,
-        reply_markup=transport_menu_ikb(),
-        parse_mode="HTML"
-    )
+    try:
+        await callback.message.edit_text(
+            text,
+            reply_markup=transport_menu_ikb(),
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.delete()
+        
+        await callback.message.answer(
+            text=text,
+            reply_markup=transport_menu_ikb(),
+            parse_mode="HTML"
+        )
     
 @router.callback_query(F.data == 'transport_catalog')
 async def transport_catalog(callback: types.CallbackQuery):
@@ -110,22 +119,7 @@ async def transport_agregator(callback: types.CallbackQuery):
 При ДТП сразу необходимо звонить Вячеславу 
 
 
-<b>Партнер 2 - ART RENTAL CAR - сдача от 3х суток
-Условия аренды:</b> 
-- Без ограничения в км
-- Полная страховка на автомобиль (кроме шин)
-- От 7 дней доставка бесплатная 
-- Депозит возвращают сразу после сдачи авто(в случае если придет штраф вышлют квитанцию) 
-- Оплата принимается: RUB (перевод), USD, EUR, USDT любым удобным для вас методом
-- Предоплата <b>10%</b> от суммы аренды (остаток суммы вносится после осмотра автомобиля и подписания договора аренды)
-
-<i>*В случае аварии депозит не возвращается, все что свыше покрывает страховая компания</i>
-
-При ДТП сразу необходимо звонить Артуру
-Предоставят автомобиль того же класса, в случаях непредвиденных обстоятельств
-
-
-<b>Партнер 3 - Пауль Кабриолеты (скидка не работает бронь только через @adelsuprun) - сдача от 3х суток
+<b>Партнер 2 - Пауль Кабриолеты (скидка не работает бронь только через @adelsuprun) - сдача от 3х суток
 Условия аренды: </b>
 - От 150км сутки 
 - От 7 дней доставка бесплатная 
@@ -138,7 +132,7 @@ async def transport_agregator(callback: types.CallbackQuery):
 При ДТП сразу необходимо звонить Паулю
 
 
-<b>Партнер 4 - Сергей - аренда в 5 городах Африки
+<b>Партнер 3 - Сергей - аренда в 5 городах Африки
 Условия аренды:</b>
 - от 150 км 
 - Расширенная страховка приобретается отдельно (R100 - R200/сутки)
@@ -161,95 +155,110 @@ async def transport_agregator(callback: types.CallbackQuery):
     )
 
 @router.callback_query(F.data.startswith('transport_partner_'))
-async def transport_partner_request(callback: types.CallbackQuery, state: FSMContext):
-    await state.set_state(TransportStates.waiting_for_transport_data)
+async def transport_partner_request(callback: types.CallbackQuery):
     
-    text = """
-Ответьте на данные вопросы и отправьте ответ боту в одном сообщении. Партнер увидит вашу заявку и вскоре свяжется с вами.
-1. Точная Дата аренды: 
-2. Сколько человек:
-3. Пожелания по автомобилю: 
-4. Контакт для связи:
+    partner_number = int(callback.data.split('_')[-1])
+    
+    if partner_number == 1:
+        partner = "Вячеславом"
+        file_path = "app/content/Каталог Вячеслав.pdf"
+        url = "t.me/slavailjin"
+    elif partner_number == 2:
+        partner = "Паулем (связь через Адель)"
+        file_path = "app/content/Каталог Пауль.pdf"
+        url = "t.me/adelsuprun"
+    else:
+        partner = "Сергеем (менеджер Екатерина)"
+        file_path = "app/content/Каталог Сергей.pdf"
+        url = "t.me/lovkaya_77"
+    
+    text = f"""
+Свяжитесь с партнером {partner}, также не забудьте указать важные данные для заявки:
+1. Дата аренды
+2. Количество человек
+3. Пожелания по автомобилю
+"""
 
-<b>Не забудьте, бронируя в Bro Bot у Вас скидка на итоговую сумму аренды!</b>"""
-
-    await callback.message.edit_text(
-        text,
-        reply_markup=transport_request_ikb(),
+    document = FSInputFile(file_path)
+    
+    await callback.message.answer_document(
+        caption=text,
+        document=document,
+        reply_markup=transport_request_ikb(url),
         parse_mode="HTML"
     )
 
-# Обработчик текстового сообщения с данными заявки
-@router.message(TransportStates.waiting_for_transport_data, F.text)
-async def process_transport_data(message: types.Message, state: FSMContext, bot: Bot):
-    transport_data = message.text
-    user = message.from_user
+# # Обработчик текстового сообщения с данными заявки
+# @router.message(TransportStates.waiting_for_transport_data, F.text)
+# async def process_transport_data(message: types.Message, state: FSMContext, bot: Bot):
+#     transport_data = message.text
+#     user = message.from_user
     
-    # Добавляем/обновляем пользователя в БД
-    db.add_user(
-        tg_id=user.id,
-        username=user.username,
-        full_name=user.full_name
-    )
+#     # Добавляем/обновляем пользователя в БД
+#     db.add_user(
+#         tg_id=user.id,
+#         username=user.username,
+#         full_name=user.full_name
+#     )
     
-    # Получаем пользователя из БД для получения ID
-    user_db = db.get_user(user.id)
+#     # Получаем пользователя из БД для получения ID
+#     user_db = db.get_user(user.id)
     
-    if user_db:
-        # Сохраняем заявку в БД с выбранной длительностью
-        request_id = db.add_request(
-            user_id=user_db['id'],
-            request_type='transport',
-            text=transport_data,
-            duration_days=0
-        )
+#     if user_db:
+#         # Сохраняем заявку в БД с выбранной длительностью
+#         request_id = db.add_request(
+#             user_id=user_db['id'],
+#             request_type='transport',
+#             text=transport_data,
+#             duration_days=0
+#         )
         
-        if request_id:
-            # Отправляем уведомление админам
-            await notify_admins_about_new_transport(bot, transport_data, user, request_id)
+#         if request_id:
+#             # Отправляем уведомление админам
+#             await notify_admins_about_new_transport(bot, transport_data, user, request_id)
             
-            # Уведомляем пользователя
-            await message.answer(
-                f"✅ Спасибо! Ваша заявка получена и отправлено на модерацию.\n",
-                reply_markup=back_start_menu()
-            )
-        else:
-            await message.answer(
-                "❌ Произошла ошибка при сохранении заявки. Попробуйте позже.",
-                reply_markup=back_start_menu()
-            )
-    else:
-        await message.answer(
-            "❌ Ошибка при обработке вашего запроса. Попробуйте позже.",
-            reply_markup=back_start_menu()
-        )
+#             # Уведомляем пользователя
+#             await message.answer(
+#                 f"✅ Спасибо! Ваша заявка получена и отправлено на модерацию.\n",
+#                 reply_markup=back_start_menu()
+#             )
+#         else:
+#             await message.answer(
+#                 "❌ Произошла ошибка при сохранении заявки. Попробуйте позже.",
+#                 reply_markup=back_start_menu()
+#             )
+#     else:
+#         await message.answer(
+#             "❌ Ошибка при обработке вашего запроса. Попробуйте позже.",
+#             reply_markup=back_start_menu()
+#         )
     
-    # Сбрасываем состояние
-    await state.clear()
+#     # Сбрасываем состояние
+#     await state.clear()
     
-async def notify_admins_about_new_transport(bot: Bot, transport_data: str, user: types.User, request_id: int):
-    """Уведомляет партнеров о новой заявке"""
-    try:
+# async def notify_admins_about_new_transport(bot: Bot, transport_data: str, user: types.User, request_id: int):
+#     """Уведомляет партнеров о новой заявке"""
+#     try:
         
-        admin_text = (
-            "🎉 <b>НОВАЯ ЗАЯВКА ОТ БОТА</b>\n\n"
-            f"👤 <b>От:</b> {user.full_name}\n"
-            f"📱 <b>Username:</b> @{user.username if user.username else 'нет'}\n"
-            f"🆔 <b>User ID:</b> {user.id}\n"
-            f"📋 <b>ID заявки:</b> #{request_id}\n"
-            f"📝 <b>Описание заявки:</b>\n{transport_data}\n\n"
-        )
+#         admin_text = (
+#             "🎉 <b>НОВАЯ ЗАЯВКА ОТ БОТА</b>\n\n"
+#             f"👤 <b>От:</b> {user.full_name}\n"
+#             f"📱 <b>Username:</b> @{user.username if user.username else 'нет'}\n"
+#             f"🆔 <b>User ID:</b> {user.id}\n"
+#             f"📋 <b>ID заявки:</b> #{request_id}\n"
+#             f"📝 <b>Описание заявки:</b>\n{transport_data}\n\n"
+#         )
         
-        # Отправляем всем админам
-        for admin_id in Config.ADMIN_IDS:
-            try:
-                await bot.send_message(
-                    chat_id=admin_id,
-                    text=admin_text,
-                    parse_mode="HTML"
-                )
-            except Exception as e:
-                logging.error(f"Ошибка отправки партнеру {admin_id}: {e}")
+#         # Отправляем всем админам
+#         for admin_id in Config.ADMIN_IDS:
+#             try:
+#                 await bot.send_message(
+#                     chat_id=admin_id,
+#                     text=admin_text,
+#                     parse_mode="HTML"
+#                 )
+#             except Exception as e:
+#                 logging.error(f"Ошибка отправки партнеру {admin_id}: {e}")
                 
-    except Exception as e:
-        logging.error(f"Ошибка в notify_admins_about_new_transport: {e}")
+#     except Exception as e:
+#         logging.error(f"Ошибка в notify_admins_about_new_transport: {e}")

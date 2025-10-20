@@ -14,18 +14,23 @@ async def cmd_start(update: types.Message | types.CallbackQuery):
         message = update
     
     text = (
-        "Хей! Рад видеть Вас в Кейптауне 🌞\n"
-        "Я — <b>Бро Бот</b>, локальный помощник по всем вопросам\n"
-        "По вопросам сотрудничества к @adelsuprun\n"
-        "Готовы начать?"
+        "Я помогу разобраться с городом — от жилья и транспорта до мероприятий и крутых мест\n\nЧто интересует первым делом?"
     )
     
 
     if isinstance(update, types.CallbackQuery):
-        await message.edit_text(
-            text,
-            reply_markup=start_menu(),
-            parse_mode="HTML"
+        try:
+            await message.edit_text(
+                text,
+                reply_markup=start_menu(),
+                parse_mode="HTML"
+            )
+        except Exception:
+            await message.delete()
+            await message.answer(
+                text,
+                reply_markup=start_menu(),
+                parse_mode="HTML"
         )
     else:
         await message.answer(

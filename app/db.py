@@ -1,6 +1,9 @@
 import sqlite3
 import logging
 import json
+from pytz import timezone
+import pytz
+from datetime import datetime, timedelta
 from pathlib import Path
 from config import Config
 
@@ -247,7 +250,7 @@ class Database:
                 cursor.execute('''
                     INSERT INTO requests (user_id, type, text, duration_days, media_paths, status)
                     VALUES (?, ?, ?, ?, ?, ?)
-                ''', (user_id, request_type, duration_days, text, media_json, status))
+                ''', (user_id, request_type, text, duration_days, media_json, status))
                 
                 conn.commit()
                 return cursor.lastrowid
@@ -365,6 +368,116 @@ class Database:
         except Exception as e:
             logging.error(f"Error getting requests by type: {e}")
             return []
+        
+
+    def check_recent_request_by_tg_id(self, tg_id: int, request_type: str) -> dict:
+        """
+        Проверяет наличие активной заявки по tg_id и типу
+        и возвращает время до истечения периода из duration_days.
+        
+        Args:
+            tg_id: Telegram ID пользователя
+            request_type: Тип заявки
+            
+        Returns:
+            dict: {
+                'exists': bool,
+                'time_remaining': str or None,  # В формате "X дней Y часов"
+                'hours_remaining': float or None,  # Оставшееся время в часах
+                'request_created_at': str or None,  # Время создания заявки
+                'duration_days': int or None  # Длительность заявки в днях
+            }
+        """
+        try:
+            # Определяем часовой пояс (например, Europe/Moscow)
+            local_tz = timezone('Europe/Moscow')  # Замените на нужный часовой пояс
+            
+            with self.get_connection() as conn:
+                cursor = conn.cursor()
+                
+                # Текущее время в локальном часовом поясе
+                now_local = datetime.now(local_tz)
+                
+                query = '''
+                    SELECT r.updated_at, r.duration_days 
+                    FROM requests r 
+                    JOIN users u ON r.user_id = u.id 
+                    WHERE u.tg_id = ? AND r.type = ? AND (r.status = 'approved' OR r.status = 'pending')
+                    ORDER BY r.updated_at DESC 
+                    LIMIT 1
+                '''
+                
+                cursor.execute(query, (tg_id, request_type))
+                result = cursor.fetchone()
+                print(result)
+                
+                if not result:
+                    return {
+                        'exists': False,
+                        'time_remaining': None,
+                        'hours_remaining': None,
+                        'request_created_at': None,
+                        'duration_days': None
+                    }
+                
+                # Получаем время создания заявки и длительность из базы данных
+                request_created_db = result[0]
+                duration_days = result[1]
+                
+                # Преобразуем время из базы данных в локальный часовой пояс
+                if isinstance(request_created_db, str):
+                    request_created_utc = datetime.fromisoformat(request_created_db.replace('Z', '+00:00'))
+                else:
+                    request_created_utc = request_created_db
+                    
+                # Если время из базы не имеет часового пояса, считаем что это UTC
+                if request_created_utc.tzinfo is None:
+                    request_created_utc = pytz.utc.localize(request_created_utc)
+                
+                # Конвертируем в локальный часовой пояс
+                request_created_local = request_created_utc.astimezone(local_tz)
+                
+                # Вычисляем время, когда пройдет duration_days с момента создания заявки
+                expiration_time = request_created_local + timedelta(days=duration_days)
+                
+                # Проверяем, не истекло ли уже время
+                if now_local >= expiration_time:
+                    return {
+                        'exists': True,
+                        'time_remaining': "Время истекло",
+                        'hours_remaining': 0,
+                        'request_created_at': request_created_local.isoformat(),
+                        'duration_days': duration_days
+                    }
+                
+                # Вычисляем оставшееся время
+                time_left = expiration_time - now_local
+                
+                total_hours = time_left.total_seconds() / 3600
+                
+                # Форматируем в дни и часы
+                days_left = int(total_hours // 24)
+                hours_left = int(total_hours % 24)
+                
+                time_remaining_str = f"{days_left} дней {hours_left} часов"
+                
+                return {
+                    'exists': True,
+                    'time_remaining': time_remaining_str,
+                    'hours_remaining': total_hours,
+                    'request_created_at': request_created_local.isoformat(),
+                    'duration_days': duration_days
+                }
+                
+        except Exception as e:
+            logging.error(f"Error checking recent request by tg_id: {e}")
+            return {
+                'exists': False,
+                'time_remaining': None,
+                'hours_remaining': None,
+                'request_created_at': None,
+                'duration_days': None
+            }
 
     def get_pending_requests(self, limit: int = None):
         """Получение ожидающих заявок"""
@@ -404,6 +517,39 @@ class Database:
         except Exception as e:
             logging.error(f"Error getting pending requests: {e}")
             return []
+        
+    def get_request_by_id(self, request_id: int):
+        """Получение заявки по ID"""
+        try:
+            with self.get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute('''
+                    SELECT r.*, u.tg_id, u.username, u.full_name 
+                    FROM requests r 
+                    JOIN users u ON r.user_id = u.id 
+                    WHERE r.id = ?
+                ''', (request_id,))
+                row = cursor.fetchone()
+                
+                if row:
+                    return {
+                        'id': row[0],
+                        'user_id': row[1],
+                        'type': row[2],
+                        'text': row[3],
+                        'duration_days': row[4],
+                        'media_paths': json.loads(row[5]) if row[5] else [],
+                        'status': row[6],
+                        'created_at': row[7],
+                        'updated_at': row[8],
+                        'user_tg_id': row[9],
+                        'user_username': row[10],
+                        'user_full_name': row[11]
+                    }
+                return None
+        except Exception as e:
+            logging.error(f"Error getting request by ID: {e}")
+            return None
 
     def update_request_status(self, request_id: int, status: str) -> bool:
         """Обновление статуса заявки"""

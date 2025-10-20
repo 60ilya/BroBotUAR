@@ -51,6 +51,18 @@ async def housing_rent(callback: types.CallbackQuery):
     
 @router.callback_query(F.data == 'housing_request')
 async def housing_request(callback: types.CallbackQuery, state: FSMContext):
+    request = db.check_recent_request_by_tg_id(
+        tg_id=callback.from_user.id, 
+        request_type="housing"
+    )
+    
+    if request['exists']:
+        await callback.message.edit_text(
+            f"Вы уже отправляли заявку за эти 2 недели. Следующую заявку вы сможете подать через {request['time_remaining']}",
+            reply_markup=housing_request_ikb(),
+            parse_mode="HTML")
+        return
+    
     await state.set_state(HousingStates.waiting_for_housing_data)
     
     contact = f"@{callback.from_user.username}" if callback.from_user.username else ""

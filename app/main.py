@@ -2,7 +2,7 @@ import asyncio
 import logging
 from aiogram import Bot, Dispatcher
 from config import Config
-from handlers import start, events, routes, housing, transport
+from handlers import start, events, routes, housing, transport, adverts, admin, contacts
 from db import Database
 
 async def main():
@@ -18,6 +18,9 @@ async def main():
     dp.include_router(routes.router)
     dp.include_router(housing.router)
     dp.include_router(transport.router)
+    dp.include_router(adverts.router)
+    dp.include_router(contacts.router)
+    dp.include_router(admin.router)
     
     await dp.start_polling(bot)
 

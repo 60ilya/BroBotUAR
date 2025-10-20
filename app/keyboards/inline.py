@@ -12,8 +12,8 @@ def start_menu():
          InlineKeyboardButton(text='Конструктор маршрута', callback_data='routes')],
         [InlineKeyboardButton(text='Жилье и недвижимость', callback_data='housing'),
          InlineKeyboardButton(text='Транспорт и аренда', callback_data='transport')],
-        [InlineKeyboardButton(text='Объявления и услуги', callback_data='adsServices'),
-         InlineKeyboardButton(text='Полезные контакты и поддержка', callback_data='contacts')]
+        [InlineKeyboardButton(text='Объявления и услуги', callback_data='adverts'),
+         InlineKeyboardButton(text='Контакты и поддержка', callback_data='contacts')]
     ])
     
 def events_menu():
@@ -23,10 +23,10 @@ def events_menu():
         [InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
     ])
     
-def events_month_menu(pin_url):
+def events_month_menu():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='📅 События этой недели', url=pin_url),
-         InlineKeyboardButton(text='🗓 Мероприятия месяца', url='https://t.me/capetown_uar/978')],
+        [InlineKeyboardButton(text='📅 События недели', url='https://t.me/capetown_uar/999'),
+         InlineKeyboardButton(text='🗓 События месяца', url='https://t.me/capetown_uar/978')],
         [InlineKeyboardButton(text='🔙 Назад', callback_data='events'),
          InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
     ])
@@ -44,6 +44,15 @@ def events_month_request(is_monthly: bool = False):
     
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=toggle_text, callback_data="events_duration")],
+        [
+            InlineKeyboardButton(text='🔙 Назад', callback_data='events'),
+            InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')
+        ]
+    ])
+    
+def events_request_ikb():
+
+    return InlineKeyboardMarkup(inline_keyboard=[
         [
             InlineKeyboardButton(text='🔙 Назад', callback_data='events'),
             InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')
@@ -104,8 +113,7 @@ def transport_partners_ikb():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='Партнер 1', callback_data='transport_partner_1'),
          InlineKeyboardButton(text='Партнер 2', callback_data='transport_partner_2')],
-        [InlineKeyboardButton(text='Партнер 3', callback_data='transport_partner_3'),
-         InlineKeyboardButton(text='Партнер 4', callback_data='transport_partner_4')],
+        [InlineKeyboardButton(text='Партнер 3', callback_data='transport_partner_3')],
         [InlineKeyboardButton(text='🔙 Назад', callback_data='transport'),
         InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
     ])
@@ -119,8 +127,80 @@ def transport_agregator_ikb():
         InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
     ])
     
-def transport_request_ikb():
+def transport_request_ikb(url):
     return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Забронировать', url=url)],
         [InlineKeyboardButton(text='🔙 Назад', callback_data='transport'),
         InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
     ])
+    
+def adverts_menu_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='🏡 Посмотреть объявления', url='https://t.me/capetownads')],
+        [InlineKeyboardButton(text='➕ Подать объявление/услугу', callback_data='adverts_request')],
+        [InlineKeyboardButton(text='Мероприятия этой недели', url='https://t.me/capetown_uar/978')],
+        [InlineKeyboardButton(text='Найти с кем пошерить жилье/экскурсии', callback_data='adverts_share')],
+        [InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def adverts_request_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='adverts'),
+        InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def contacts_menu_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Визы и юр. услуги', callback_data='contacts_visa'),
+         InlineKeyboardButton(text='💰 Обмен', callback_data='contacts_exchange')],
+        [InlineKeyboardButton(text='Обманули? (раздел помощи)', callback_data='contacts_lie')],
+        [InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def contacts_exchange_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='contacts'),
+        InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def admin_menu_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Заявки', callback_data='admin_requests')],
+        [InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def request_action_ikb(request_id: int, current_index: int, total_requests: int):
+    """Клавиатура действий для заявки с пагинацией"""
+    keyboard = []
+    
+    # Кнопки действий
+    keyboard.append([
+        InlineKeyboardButton(text="✔️ Принять", callback_data=f"admin_accept_{request_id}"),
+        InlineKeyboardButton(text="✖️ Отклонить", callback_data=f"admin_decline_{request_id}")
+    ])
+
+    # Кнопки пагинации
+    nav_buttons = []
+    if current_index > 0:
+        nav_buttons.append(InlineKeyboardButton(text="⬅️ Предыдущая", callback_data=f"admin_prev_{current_index}"))
+    
+    nav_buttons.append(InlineKeyboardButton(text=f"{current_index + 1}/{total_requests}", callback_data="admin_current_page"))
+    
+    if current_index < total_requests - 1:
+        nav_buttons.append(InlineKeyboardButton(text="Следующая ➡️", callback_data=f"admin_next_{current_index}"))
+    
+    if nav_buttons:
+        keyboard.append(nav_buttons)
+    
+    keyboard.append([InlineKeyboardButton(text="🔙 Назад", callback_data="admin")])
+    
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+def admin_request_confirm_ikb(request_id: int):
+    """Клавиатура для подтверждения принятия"""
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="✔️ Да, принять заявку", callback_data=f"admin_confirm_accept_{request_id}")],
+            [InlineKeyboardButton(text="✖️ Отмена", callback_data=f"admin_cancel_accept_{request_id}")]
+        ]
+    )
