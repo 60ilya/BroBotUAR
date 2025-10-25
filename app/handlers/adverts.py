@@ -2,6 +2,7 @@ import logging
 from aiogram import Router, types, F, Bot
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
+from aiogram.types import FSInputFile
 from config import Config
 from db import Database
 from keyboards.inline import adverts_menu_ikb, adverts_request_ikb, back_start_menu
@@ -28,21 +29,35 @@ async def adverts_menu(callback: types.CallbackQuery):
 
 Все объявления действуют 14 дней, чтобы информация оставалась актуальной ✨
 """
-    await callback.message.edit_text(
-        text,
-        reply_markup=adverts_menu_ikb(),
-        parse_mode="HTML")
+
+    try:
+        await callback.message.delete()
+    except:
+        pass
+    finally:
+        await callback.message.answer_photo(
+            photo=FSInputFile('app/content/menu_adverts.jpg'),
+            caption=text,
+            reply_markup=adverts_menu_ikb(),
+            parse_mode="HTML"
+        )
+
     
   
 @router.callback_query(F.data == 'adverts_request')
 async def adverts_request(callback: types.CallbackQuery, state: FSMContext):
+    try:
+        await callback.message.delete()
+    except:
+        pass
+    
     request = db.check_recent_request_by_tg_id(
         tg_id=callback.from_user.id, 
         request_type="adverts"
     )    
     
     if request['exists']:
-        await callback.message.edit_text(
+        await callback.message.answer(
             f"Вы уже отправляли заявку за эти 2 недели. Следующую заявку вы сможете подать через {request['time_remaining']}",
             reply_markup=adverts_request_ikb(),
             parse_mode="HTML")
@@ -70,21 +85,24 @@ async def adverts_request(callback: types.CallbackQuery, state: FSMContext):
 После модерации объявление появится в разделе “Услуги и активности” и будет видно всем пользователям 💬"""
 
     
-    await callback.message.edit_text(
+    await callback.message.answer(
         text=text,
         reply_markup=adverts_request_ikb(),
         parse_mode="HTML")
     
 @router.callback_query(F.data == 'adverts_share')
 async def adverts_request(callback: types.CallbackQuery, state: FSMContext):
-    await state.set_state(AdvertsStates.waiting_for_adverts_data)
+    try:
+        await callback.message.delete()
+    except:
+        pass
     
-    contact = f"@{callback.from_user.username}" if callback.from_user.username else ""
+    await state.set_state(AdvertsStates.waiting_for_adverts_data)
     
     text = f"""✨ Опишите свой запрос и мы опубликуем в недвижимость или в объявления"""
 
     
-    await callback.message.edit_text(
+    await callback.message.answer(
         text=text,
         reply_markup=adverts_request_ikb(),
         parse_mode="HTML")

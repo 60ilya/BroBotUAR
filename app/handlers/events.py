@@ -2,6 +2,7 @@ import logging
 from aiogram import Router, types, F, Bot
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
+from aiogram.types import FSInputFile
 from config import Config
 from db import Database
 from keyboards.inline import events_menu, events_month_menu, events_month_request, back_start_menu, events_month_request, events_request_ikb
@@ -13,22 +14,34 @@ class EventStates(StatesGroup):
     waiting_for_event_data = State() 
 
 @router.callback_query(F.data == 'events')
-async def cmd_start(callback: types.CallbackQuery):
-    await callback.message.edit_text(
-        "🎟 Всё самое интересное в Кейптауне — концерты, маркеты, вечеринки, выставки",
-        reply_markup=events_menu(),
-        parse_mode="HTML")
+async def cmd_start(callback: types.CallbackQuery):    
+    try:
+        await callback.message.delete()
+    except:
+        pass
+    finally:
+        await callback.message.answer_photo(
+            photo=FSInputFile('app/content/menu_events.jpg'),
+            caption="🎟 Всё самое интересное в Кейптауне — концерты, маркеты, вечеринки, выставки",
+            reply_markup=events_menu(),
+            parse_mode="HTML"
+        )
     
 @router.callback_query(F.data == 'events_month')
 async def events_month(callback: types.CallbackQuery):
+    try:
+        await callback.message.delete()
+    except:
+        pass
+    finally:
+        await callback.message.answer(
+            "🎟 <b>Афиша Кейптауна — всё самое интересное этого месяца!</b>\n"
+            "🌴 Фестивали, вечеринки, маркеты, выставки, концерты и новые места — я собираю для тебя всё, что стоит внимания.\n\n"
+            "💡 <b>События этой недели</b> обновляется каждую неделю, чтобы всегда быть в курсе,"
+            " <b>куда пойти в выходные, где поесть вкусно, а где потанцевать до утра.</b>",
+            reply_markup=events_month_menu(),
+            parse_mode="HTML")
     
-    await callback.message.edit_text(
-        "🎟 <b>Афиша Кейптауна — всё самое интересное этого месяца!</b>\n"
-        "🌴 Фестивали, вечеринки, маркеты, выставки, концерты и новые места — я собираю для тебя всё, что стоит внимания.\n\n"
-        "💡 <b>События этой недели</b> обновляется каждую неделю, чтобы всегда быть в курсе,"
-        " <b>куда пойти в выходные, где поесть вкусно, а где потанцевать до утра.</b>",
-        reply_markup=events_month_menu(),
-        parse_mode="HTML")
     
 async def get_pinned_message_url(bot: Bot, channel_username: str) -> str:
     """Получает ссылку на закрепленное сообщение канала"""
@@ -48,13 +61,18 @@ async def get_pinned_message_url(bot: Bot, channel_username: str) -> str:
     
 @router.callback_query(F.data == 'events_request')
 async def events_request(callback: types.CallbackQuery, state: FSMContext):
+    try:
+        await callback.message.delete()
+    except:
+        pass
+    
     request = db.check_recent_request_by_tg_id(
         tg_id=callback.from_user.id, 
         request_type="events"
     )
     
     if request['exists']:
-        await callback.message.edit_text(
+        await callback.message.answer(
             f"Вы уже отправляли заявку за эти 2 недели. Следующую заявку вы сможете подать через {request['time_remaining']}",
             reply_markup=events_request_ikb(),
             parse_mode="HTML")
@@ -65,7 +83,7 @@ async def events_request(callback: types.CallbackQuery, state: FSMContext):
     # Инициализируем состояние с выбором длительности по умолчанию
     await state.update_data(duration_days=14, is_monthly=False)
 
-    await callback.message.edit_text(
+    await callback.message.answer(
         "🎉 Классно! Расскажите о своём мероприятии, и я добавлю его в События этой недели 🙌\n\n"
         "📅 <b>Выберите длительность размещения:</b>\n"
         "• Афиша недели - 14 дней (бесплатно)\n"

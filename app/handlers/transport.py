@@ -31,22 +31,24 @@ async def transport_menu(callback: types.CallbackQuery):
 <i>*Скидка суммируется со скидкой партнера</i>"""
 
     try:
-        await callback.message.edit_text(
-            text,
-            reply_markup=transport_menu_ikb(),
-            parse_mode="HTML"
-        )
-    except Exception:
         await callback.message.delete()
-        
-        await callback.message.answer(
-            text=text,
+    except:
+        pass
+    finally:
+        await callback.message.answer_photo(
+            photo=FSInputFile('app/content/menu_transport.jpg'),
+            caption=text,
             reply_markup=transport_menu_ikb(),
             parse_mode="HTML"
         )
     
+    
 @router.callback_query(F.data == 'transport_catalog')
 async def transport_catalog(callback: types.CallbackQuery):
+    try:
+        await callback.message.delete()
+    except:
+        pass
     
     text = """
 <b>Перед тем как арендовать рекомендую ознакомиться с условиями рынка автомобилей тут есть два варианта аренды:</b>
@@ -77,7 +79,7 @@ async def transport_catalog(callback: types.CallbackQuery):
 Чем раньше бронируете, тем больше выбор!"""
 
     
-    await callback.message.edit_text(
+    await callback.message.answer(
         text,
         reply_markup=transport_catalog_ikb(),
         parse_mode="HTML"

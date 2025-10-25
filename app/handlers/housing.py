@@ -2,6 +2,7 @@ import logging
 from aiogram import Router, types, F, Bot
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
+from aiogram.types import FSInputFile
 from config import Config
 from db import Database
 from keyboards.inline import housing_menu_ikb, housing_rent_ikb, housing_request_ikb, back_start_menu
@@ -14,50 +15,56 @@ class HousingStates(StatesGroup):
 
 @router.callback_query(F.data == 'housing')
 async def housing_menu(callback: types.CallbackQuery):
-    await callback.message.edit_text(
-        "🏠 Только свежие и реальные объявления.\n"
-        "📅 Каждое объявление активно 14 дней, потом его нужно обновить.\n"
-        "Здесь вы сможете:\n"
-        "— найти квартиру, комнату или дом\n"
-        "— разместить своё объявление\n"
-        "Что интересует?\n",
-        reply_markup=housing_menu_ikb(),
-        parse_mode="HTML")
+    try:
+        await callback.message.delete()
+    except:
+        pass
+    finally:
+        await callback.message.answer_photo(
+            photo=FSInputFile('app/content/menu_housing.jpg'),
+            caption=
+            "🏠 Только свежие и реальные объявления.\n"
+            "📅 Каждое объявление активно 14 дней, потом его нужно обновить.\n"
+            "Здесь вы сможете:\n"
+            "— найти квартиру, комнату или дом\n"
+            "— разместить своё объявление\n"
+            "Что интересует?\n",
+            reply_markup=housing_menu_ikb(),
+            parse_mode="HTML"
+        )
+    
     
 @router.callback_query(F.data == 'housing_rent')
 async def housing_rent(callback: types.CallbackQuery):
+    try:
+        await callback.message.delete()
+    except:
+        pass
+    
     text_template = "Приветсвую я из Bro BOT пишу по теме недвижимости, мне нужна консультация\n\nНа тему: Сопровождение покупка/продажа, аренда коммерческого помещения, аренда от 6 месяцев и больше\n"
     
-    await callback.message.edit_text(
+    await callback.message.answer(
         "Скопируйте шаблон и отправляйте @controllinginternational\n\n"
         "<code>Приветсвую я из Bro BOT пишу по теме недвижимости, мне нужна консультация\n\n"
         "На тему: Сопровождение покупка/продажа, аренда коммерческого помещения, аренда от 6 месяцев и больше\n</code>",
         reply_markup=housing_rent_ikb(text_template),
         parse_mode="HTML")
     
-@router.callback_query(F.data == 'housing_rent')
-async def housing_rent(callback: types.CallbackQuery):
-    text_template = """
-Приветсвую я из Bro BOT пишу по теме недвижимости, мне нужна консультация
-
-На тему: Сопровождение покупка/продажа, аренда коммерческого помещения, аренда от 6 месяцев и больше"""
-    
-    await callback.message.edit_text(
-        "Скопируйте шаблон и отправляйте @controllinginternational\n\n"
-        "<code>Приветсвую я из Bro BOT пишу по теме недвижимости, мне нужна консультация\n\n"
-        "На тему: Сопровождение покупка/продажа, аренда коммерческого помещения, аренда от 6 месяцев и больше\n</code>",
-        reply_markup=housing_rent_ikb(text_template),
-        parse_mode="HTML")
     
 @router.callback_query(F.data == 'housing_request')
 async def housing_request(callback: types.CallbackQuery, state: FSMContext):
+    try:
+        await callback.message.delete()
+    except:
+        pass
+    
     request = db.check_recent_request_by_tg_id(
         tg_id=callback.from_user.id, 
         request_type="housing"
     )
     
     if request['exists']:
-        await callback.message.edit_text(
+        await callback.message.answer(
             f"Вы уже отправляли заявку за эти 2 недели. Следующую заявку вы сможете подать через {request['time_remaining']}",
             reply_markup=housing_request_ikb(),
             parse_mode="HTML")
@@ -96,7 +103,7 @@ async def housing_request(callback: types.CallbackQuery, state: FSMContext):
 <b>👤 Контакт (TG ник или телефон):</b> {contact}</code>
 📸 По желанию прикрепите фото"""
     
-    await callback.message.edit_text(
+    await callback.message.answer(
         "Скопируйте нужный шаблон, заполните его и отправьте боту в ответ. Обьявление пройдет модерацию и вскоре будет опубликовано на 14 дней, после чего вы получите уведомление.\n"
         f"{search_template}\n"
         f"{rent_template}\n"
