@@ -4,7 +4,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from config import Config
 from db import Database
-from keyboards.inline import contacts_menu_ikb, contacts_exchange_ikb
+from keyboards.inline import contacts_menu_ikb, contacts_exchange_ikb, contacts_card_ikb
 
 router = Router()
 db = Database()
@@ -52,14 +52,13 @@ async def contacts_exchange(callback: types.CallbackQuery):
 <b>👾 Отзывы - @conexus_crypto_reviews</b>"""
 
     try:
-        await callback.message.edit_text(
-            text=text,
-            reply_markup=contacts_exchange_ikb(),
-            parse_mode="HTML")
-    except:
         await callback.message.delete()
-        await callback.message.answer(
-            text=text,
+    except:
+        pass
+    finally:
+        await callback.message.answer_video(
+            video=types.FSInputFile('app/content/contacts_exchange.mp4'),
+            caption=text,
             reply_markup=contacts_exchange_ikb(),
             parse_mode="HTML")
     
@@ -86,7 +85,7 @@ async def contacts_visa(callback: types.CallbackQuery):
     await callback.message.delete()
     await callback.message.answer_video(
         caption=text,
-        video=types.FSInputFile('app/content/conexus.mp4'),
+        video=types.FSInputFile('app/content/contacts_visa.mp4'),
         reply_markup=contacts_exchange_ikb(),
         parse_mode="HTML")
 
@@ -140,6 +139,6 @@ async def contacts_card(callback: types.CallbackQuery):
     # Клавиатура отдельным сообщением
     await callback.message.answer(
         text,
-        reply_markup=contacts_exchange_ikb(),
+        reply_markup=contacts_card_ikb(),
         parse_mode="HTML"
     )

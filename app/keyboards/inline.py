@@ -161,6 +161,12 @@ def contacts_menu_ikb():
     
 def contacts_exchange_ikb():
     return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='contacts'),
+        InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
+    ])
+    
+def contacts_card_ikb():
+    return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='Заказать карту', url='t.me/oplatagurucardsbot')],
         [InlineKeyboardButton(text='🔙 Назад', callback_data='contacts'),
         InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
