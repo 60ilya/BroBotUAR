@@ -130,7 +130,7 @@ def transport_agregator_ikb():
 def transport_request_ikb(url):
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='Забронировать', url=url)],
-        [InlineKeyboardButton(text='🔙 Назад', callback_data='transport'),
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='transport_partners'),
         InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
     ])
     

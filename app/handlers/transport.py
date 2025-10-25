@@ -163,15 +163,15 @@ async def transport_partner_request(callback: types.CallbackQuery):
     
     if partner_number == 1:
         partner = "Вячеславом"
-        file_path = "app/content/Каталог Вячеслав.pdf"
+        file_path = "app/content/Каталог_Вячеслав.pdf"
         url = "t.me/slavailjin"
     elif partner_number == 2:
         partner = "Паулем (связь через Адель)"
-        file_path = "app/content/Каталог Пауль.pdf"
+        file_path = "app/content/Каталог_Пауль.pdf"
         url = "t.me/adelsuprun"
     else:
         partner = "Сергеем (менеджер Екатерина)"
-        file_path = "app/content/Каталог Сергей.pdf"
+        file_path = "app/content/Каталог_Сергей.pdf"
         url = "t.me/lovkaya_77"
     
     text = f"""
@@ -183,12 +183,17 @@ async def transport_partner_request(callback: types.CallbackQuery):
 
     document = FSInputFile(file_path)
     
-    await callback.message.answer_document(
-        caption=text,
-        document=document,
-        reply_markup=transport_request_ikb(url),
-        parse_mode="HTML"
-    )
+    try:
+        await callback.message.delete()
+    except:
+        pass
+    finally:
+        await callback.message.answer_document(
+            caption=text,
+            document=document,
+            reply_markup=transport_request_ikb(url),
+            parse_mode="HTML"
+        )
 
 # # Обработчик текстового сообщения с данными заявки
 # @router.message(TransportStates.waiting_for_transport_data, F.text)
