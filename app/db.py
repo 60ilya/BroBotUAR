@@ -409,7 +409,6 @@ class Database:
                 
                 cursor.execute(query, (tg_id, request_type))
                 result = cursor.fetchone()
-                print(result)
                 
                 if not result:
                     return {
