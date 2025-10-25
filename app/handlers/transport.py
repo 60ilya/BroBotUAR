@@ -103,6 +103,10 @@ async def transport_agregator(callback: types.CallbackQuery):
 
 @router.callback_query(F.data == 'transport_partners')
 async def transport_agregator(callback: types.CallbackQuery):
+    try:
+        await callback.message.delete()
+    except:
+        pass
     
     text = """
 Выбирайте подходящие для вас условия и бронируйте автомобиль
@@ -150,7 +154,7 @@ async def transport_agregator(callback: types.CallbackQuery):
 <b>Более точную информацию предоставит партнер перед бронированием</b>"""
 
     
-    await callback.message.edit_text(
+    await callback.message.answer(
         text,
         reply_markup=transport_partners_ikb(),
         parse_mode="HTML"
