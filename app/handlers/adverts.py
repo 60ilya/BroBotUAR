@@ -90,22 +90,22 @@ async def adverts_request(callback: types.CallbackQuery, state: FSMContext):
         reply_markup=adverts_request_ikb(),
         parse_mode="HTML")
     
-@router.callback_query(F.data == 'adverts_share')
-async def adverts_request(callback: types.CallbackQuery, state: FSMContext):
-    try:
-        await callback.message.delete()
-    except:
-        pass
+# @router.callback_query(F.data == 'adverts_share')
+# async def adverts_request(callback: types.CallbackQuery, state: FSMContext):
+#     try:
+#         await callback.message.delete()
+#     except:
+#         pass
     
-    await state.set_state(AdvertsStates.waiting_for_adverts_data)
+#     await state.set_state(AdvertsStates.waiting_for_adverts_data)
     
-    text = f"""✨ Опишите свой запрос и мы опубликуем в недвижимость или в объявления"""
+#     text = f"""✨ Опишите свой запрос и мы опубликуем в недвижимость или в объявления"""
 
     
-    await callback.message.answer(
-        text=text,
-        reply_markup=adverts_request_ikb(),
-        parse_mode="HTML")
+#     await callback.message.answer(
+#         text=text,
+#         reply_markup=adverts_request_ikb(),
+#         parse_mode="HTML")
     
 # Обработчик текстового сообщения с данными мероприятия
 @router.message(AdvertsStates.waiting_for_adverts_data, F.text)
