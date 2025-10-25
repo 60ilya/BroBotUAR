@@ -421,7 +421,10 @@ class Database:
                 
                 # Получаем время создания заявки и длительность из базы данных
                 request_created_db = result[0]
-                duration_days = result[1]
+                
+                # !!!!!!!!!!!!!!!!
+                duration_days = 5 # Смотри todo
+                # !!!!!!!!!!!!!!!!
                 
                 # Преобразуем время из базы данных в локальный часовой пояс
                 if isinstance(request_created_db, str):

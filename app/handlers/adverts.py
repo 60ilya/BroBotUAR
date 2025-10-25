@@ -58,7 +58,7 @@ async def adverts_request(callback: types.CallbackQuery, state: FSMContext):
     
     if request['exists']:
         await callback.message.answer(
-            f"Вы уже отправляли заявку за эти 2 недели. Следующую заявку вы сможете подать через {request['time_remaining']}",
+            f"Вы уже отправляли заявку за эти 5 дней. Следующую заявку вы сможете подать через {request['time_remaining']}",
             reply_markup=adverts_request_ikb(),
             parse_mode="HTML")
         return

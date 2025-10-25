@@ -68,12 +68,12 @@ async def events_request(callback: types.CallbackQuery, state: FSMContext):
     
     request = db.check_recent_request_by_tg_id(
         tg_id=callback.from_user.id, 
-        request_type="events"
+        request_type="event"
     )
     
     if request['exists']:
         await callback.message.answer(
-            f"Вы уже отправляли заявку за эти 2 недели. Следующую заявку вы сможете подать через {request['time_remaining']}",
+            f"Вы уже отправляли заявку за эти 5 дней. Следующую заявку вы сможете подать через {request['time_remaining']}",
             reply_markup=events_request_ikb(),
             parse_mode="HTML")
         return
@@ -100,7 +100,7 @@ async def events_request(callback: types.CallbackQuery, state: FSMContext):
         "(2–3 предложения: что будет, для кого, чем интересно)</code>\n\n"
         "📸 (по желанию) прикрепи афишу или 1 фото\n\n"
         "💬 После модерации событие появится в афише, а я отмечу Вас как организатора\n\n"
-        "🔥 События обновляется каждую неделю, разместить мероприятие можно 1 раз в 14 дней",
+        "🔥 События обновляется каждую неделю, разместить мероприятие можно 1 раз в 5 дней",
         reply_markup=events_month_request(is_monthly=False),
         parse_mode="HTML"
     )
