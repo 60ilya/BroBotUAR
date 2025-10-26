@@ -108,37 +108,37 @@ async def contacts_lie(callback: types.CallbackQuery):
             reply_markup=contacts_exchange_ikb(),
             parse_mode="HTML")
     
-@router.callback_query(F.data == 'contacts_card')
-async def contacts_card(callback: types.CallbackQuery):
+# @router.callback_query(F.data == 'contacts_card')
+# async def contacts_card(callback: types.CallbackQuery):
     
-    text = f"""
-<b>Международная карта для путешествий</b>
+#     text = f"""
+# <b>Международная карта для путешествий</b>
 
-- Пластиковая 
-- Оформление без доверенности 
-- Оформляется за 2 дня 
-- Обслуживание — бесплатно 
-- Именная или нет — на выбор 
-- Привязывается к РФ номеру 
-- Пополнение рублями через СБП 
+# - Пластиковая 
+# - Оформление без доверенности 
+# - Оформляется за 2 дня 
+# - Обслуживание — бесплатно 
+# - Именная или нет — на выбор 
+# - Привязывается к РФ номеру 
+# - Пополнение рублями через СБП 
 
-*Доставка по всему миру промокод "<b>КЕЙПТАУН</b>" скидка 1 000RUB
+# *Доставка по всему миру промокод "<b>КЕЙПТАУН</b>" скидка 1 000RUB
 
-Путешествуйте с комфортом, <b>КРЯ</b>
+# Путешествуйте с комфортом, <b>КРЯ</b>
 
-<b>Отзывы</b> @oplataguruproofs"""
+# <b>Отзывы</b> @oplataguruproofs"""
 
-    # Все фото группой (только к первому текст)
-    media = [
-        types.InputMediaPhoto(
-            media=types.FSInputFile(f"app/content/contacts_{i}.jpg")
-        ) for i in range(1, 4)
-    ]
-    await callback.message.answer_media_group(media=media)
+#     # Все фото группой (только к первому текст)
+#     media = [
+#         types.InputMediaPhoto(
+#             media=types.FSInputFile(f"app/content/contacts_{i}.jpg")
+#         ) for i in range(1, 4)
+#     ]
+#     await callback.message.answer_media_group(media=media)
     
-    # Клавиатура отдельным сообщением
-    await callback.message.answer(
-        text,
-        reply_markup=contacts_card_ikb(),
-        parse_mode="HTML"
-    )
+#     # Клавиатура отдельным сообщением
+#     await callback.message.answer(
+#         text,
+#         reply_markup=contacts_card_ikb(),
+#         parse_mode="HTML"
+#     )

@@ -152,8 +152,7 @@ def contacts_menu_ikb():
         [InlineKeyboardButton(text='Визы и юр. услуги', callback_data='contacts_visa'),
          InlineKeyboardButton(text='💰 Обмен', callback_data='contacts_exchange')],
         [InlineKeyboardButton(text='Обманули? (раздел помощи)', callback_data='contacts_lie'),
-         InlineKeyboardButton(text='Оформить карту', callback_data='contacts_card')],
-        [InlineKeyboardButton(text='🧑‍💻 Разработка ботов и др.', url='t.me/pybuuuk')],
+        InlineKeyboardButton(text='🧑‍💻 Разработка ботов и др.', url='t.me/pybuuuk')],
         [InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
     ])
     
