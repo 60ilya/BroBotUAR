@@ -123,7 +123,7 @@ def transport_request_ikb(url):
 def adverts_menu_ikb():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='🏡 Посмотреть объявления', url='https://t.me/capetownads')],
-        [InlineKeyboardButton(text='➕ Подать объявление', callback_data='adverts_request')]
+        [InlineKeyboardButton(text='➕ Подать объявление', callback_data='adverts_request')],
         [InlineKeyboardButton(text='🔙 В главное меню', callback_data='start')]
     ])
     
