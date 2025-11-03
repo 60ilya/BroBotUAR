@@ -15,7 +15,7 @@ async def routes(callback: types.CallbackQuery):
     
     text = """
 Ваш BroBOT помощник здесь 🌴
-хочу помочь спланировать незабываемое путешествие по Кейптауну 😉
+Хочу помочь спланировать незабываемое путешествие по Кейптауну 😉
 
 Сначала мне надо задать несколько вопросов"""
 
@@ -34,7 +34,7 @@ async def routes(callback: types.CallbackQuery):
 async def routes_start(callback: types.CallbackQuery):
     
     text = """
-    С кем путешествуете?"""
+С кем путешествуете?"""
     
     try:
         await callback.message.edit_text(
@@ -54,7 +54,7 @@ async def routes_start(callback: types.CallbackQuery):
 async def routes_two(callback: types.CallbackQuery):
     
     text = """
-    На чем собираетесь передвигаться?"""
+На чем собираетесь передвигаться?"""
     
     data = callback.data.split('_')[-1]
     
@@ -88,12 +88,12 @@ async def routes_two(callback: types.CallbackQuery):
 async def routes_transport_transfer(callback: types.CallbackQuery):
     
     text = """
-    <b>💡 Совет от Бро Бота: </b>
-    Помните, если хотите комфорт и безопасность, выбирайте такси через агрегатор (Bolt, Uber) или  <b><u>красный автобус</u></b>
+<b>💡 Совет от Бро Бота: </b>
+Помните, если хотите комфорт и безопасность, выбирайте такси через агрегатор (Bolt, Uber) или  <b><u>красный автобус</u></b>
     
-    <i>*Помните общественный транспорт для местных</i>
+<i>*Помните общественный транспорт для местных</i>
     
-    Что вас больше всего интересует?"""
+Что вас больше всего интересует?"""
     
     try:
         await callback.message.edit_text(
@@ -110,11 +110,11 @@ async def routes_transport_transfer(callback: types.CallbackQuery):
 async def routes_two_nat(callback: types.CallbackQuery):
     
     text = """
-    Из природных мест в Кейптауне есть парки, горы, водопады
+Из природных мест в Кейптауне есть парки, горы, водопады
 
-    В путеводителе по Кейптауну  несколько страниц посвящено природным местам
+В путеводителе по Кейптауну  несколько страниц посвящено природным местам
 
-    <b>Выберите, что интересно:</b>"""
+<b>Выберите, что интересно:</b>"""
     
     try:
         await callback.message.edit_text(
@@ -131,7 +131,7 @@ async def routes_two_nat(callback: types.CallbackQuery):
 async def routes_two_food(callback: types.CallbackQuery):
     
     text = """
-    Что Вам подсказать?"""
+Что Вам подсказать?"""
     
     try:
         await callback.message.edit_text(
@@ -148,7 +148,7 @@ async def routes_two_food(callback: types.CallbackQuery):
 async def routes_two_break(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -165,7 +165,7 @@ async def routes_two_break(callback: types.CallbackQuery):
 async def routes_two_lun(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -182,7 +182,7 @@ async def routes_two_lun(callback: types.CallbackQuery):
 async def routes_two_din(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -199,7 +199,7 @@ async def routes_two_din(callback: types.CallbackQuery):
 async def routes_two_cof(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -226,7 +226,7 @@ async def routes_two_ani(callback: types.CallbackQuery):
 🐦 Для наблюдения за птицами стоит заглянуть в <b>Rondevlei Nature Reserve</b> — десятки видов водоплавающих и красивые маршруты по настилам
 🦈 Хочется больше адреналина? Попробуйте снорклинг с тюленями в Hout Bay или сафари-поездку в <b>Aquila Reserve</b> — эмоций хватит надолго
 
-    Больше локаций, фото и маршрутов — в <b>Путеводителе по Кейптауну</b>"""
+Больше локаций, фото и маршрутов — в <b>Путеводителе по Кейптауну</b>"""
     
     try:
         await callback.message.edit_text(
@@ -341,7 +341,7 @@ async def routes_two_bars(callback: types.CallbackQuery):
 async def routes_transport_himself(callback: types.CallbackQuery):
     
     text = """
-    Что вас больше всего интересует?"""
+Что вас больше всего интересует?"""
     
     try:
         await callback.message.edit_text(
@@ -385,7 +385,7 @@ async def routes_two_him_nat(callback: types.CallbackQuery):
 async def routes_two_him_food(callback: types.CallbackQuery):
     
     text = """
-    Что Вам подсказать?"""
+Что Вам подсказать?"""
     
     try:
         await callback.message.edit_text(
@@ -402,7 +402,7 @@ async def routes_two_him_food(callback: types.CallbackQuery):
 async def routes_two_him_break(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -419,7 +419,7 @@ async def routes_two_him_break(callback: types.CallbackQuery):
 async def routes_two_him_lun(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -436,7 +436,7 @@ async def routes_two_him_lun(callback: types.CallbackQuery):
 async def routes_two_him_din(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -453,7 +453,7 @@ async def routes_two_him_din(callback: types.CallbackQuery):
 async def routes_two_him_cof(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -594,12 +594,12 @@ async def routes_two_him_bars(callback: types.CallbackQuery):
 async def routes_alone_tran(callback: types.CallbackQuery):
     
     text = """
-    <b>💡 Совет от Бро Бота: </b>
-    Помните, если хотите комфорт и безопасность, выбирайте такси через агрегатор (Bolt, Uber) или  <b><u>красный автобус</u></b>
+<b>💡 Совет от Бро Бота: </b>
+Помните, если хотите комфорт и безопасность, выбирайте такси через агрегатор (Bolt, Uber) или  <b><u>красный автобус</u></b>
     
-    <i>*Помните общественный транспорт для местных</i>
+<i>*Помните общественный транспорт для местных</i>
     
-    Что вас больше всего интересует?"""
+Что вас больше всего интересует?"""
     
     try:
         await callback.message.edit_text(
@@ -616,11 +616,11 @@ async def routes_alone_tran(callback: types.CallbackQuery):
 async def routes_alone_nat(callback: types.CallbackQuery):
     
     text = """
-    Из природных мест в Кейптауне есть парки, горы, водопады
+Из природных мест в Кейптауне есть парки, горы, водопады
 
-    В путеводителе по Кейптауну  несколько страниц посвящено природным местам
+В путеводителе по Кейптауну  несколько страниц посвящено природным местам
 
-    <b>Выберите, что интересно:</b>"""
+<b>Выберите, что интересно:</b>"""
     
     try:
         await callback.message.edit_text(
@@ -637,7 +637,7 @@ async def routes_alone_nat(callback: types.CallbackQuery):
 async def routes_alone_food(callback: types.CallbackQuery):
     
     text = """
-    Что Вам подсказать?"""
+Что Вам подсказать?"""
     
     try:
         await callback.message.edit_text(
@@ -654,7 +654,7 @@ async def routes_alone_food(callback: types.CallbackQuery):
 async def routes_alone_break(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -671,7 +671,7 @@ async def routes_alone_break(callback: types.CallbackQuery):
 async def routes_alone_lun(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -688,7 +688,7 @@ async def routes_alone_lun(callback: types.CallbackQuery):
 async def routes_alone_din(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -705,7 +705,7 @@ async def routes_alone_din(callback: types.CallbackQuery):
 async def routes_alone_cof(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -732,7 +732,7 @@ async def routes_alone_ani(callback: types.CallbackQuery):
 🐦 Для наблюдения за птицами стоит заглянуть в <b>Rondevlei Nature Reserve</b> — десятки видов водоплавающих и красивые маршруты по настилам
 🦈 Хочется больше адреналина? Попробуйте снорклинг с тюленями в Hout Bay или сафари-поездку в <b>Aquila Reserve</b> — эмоций хватит надолго
 
-    Больше локаций, фото и маршрутов — в <b>Путеводителе по Кейптауну</b>"""
+Больше локаций, фото и маршрутов — в <b>Путеводителе по Кейптауну</b>"""
     
     try:
         await callback.message.edit_text(
@@ -847,7 +847,7 @@ async def routes_alone_bars(callback: types.CallbackQuery):
 async def routes_alone_him(callback: types.CallbackQuery):
     
     text = """
-    Что вас больше всего интересует?"""
+Что вас больше всего интересует?"""
     
     try:
         await callback.message.edit_text(
@@ -864,11 +864,11 @@ async def routes_alone_him(callback: types.CallbackQuery):
 async def routes_alone_him_nat(callback: types.CallbackQuery):
     
     text = """
-    Из природных мест в Кейптауне есть парки, горы, водопады
+Из природных мест в Кейптауне есть парки, горы, водопады
 
-    В путеводителе по Кейптауну  несколько страниц посвящено природным местам
+В путеводителе по Кейптауну  несколько страниц посвящено природным местам
 
-    <b>Выберите, что интересно:</b>"""
+<b>Выберите, что интересно:</b>"""
     
     try:
         await callback.message.edit_text(
@@ -885,7 +885,7 @@ async def routes_alone_him_nat(callback: types.CallbackQuery):
 async def routes_alone_him_food(callback: types.CallbackQuery):
     
     text = """
-    Что Вам подсказать?"""
+Что Вам подсказать?"""
     
     try:
         await callback.message.edit_text(
@@ -902,7 +902,7 @@ async def routes_alone_him_food(callback: types.CallbackQuery):
 async def routes_alone_him_break(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -919,7 +919,7 @@ async def routes_alone_him_break(callback: types.CallbackQuery):
 async def routes_alone_him_lun(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -936,7 +936,7 @@ async def routes_alone_him_lun(callback: types.CallbackQuery):
 async def routes_alone_him_din(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -953,7 +953,7 @@ async def routes_alone_him_din(callback: types.CallbackQuery):
 async def routes_alone_him_cof(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1093,11 +1093,11 @@ async def routes_alone_him_bars(callback: types.CallbackQuery):
 async def routes_fam_nat(callback: types.CallbackQuery):
     
     text = """
-    Из природных мест в Кейптауне есть парки, горы, водопады, хайки
+Из природных мест в Кейптауне есть парки, горы, водопады, хайки
 
-    В путеводителе по Кейптауну  несколько страниц посвящено природным местам
+В путеводителе по Кейптауну  несколько страниц посвящено природным местам
 
-    <b>Выберите, что интересно:</b>"""
+<b>Выберите, что интересно:</b>"""
     
     try:
         await callback.message.edit_text(
@@ -1114,7 +1114,7 @@ async def routes_fam_nat(callback: types.CallbackQuery):
 async def routes_fam_food(callback: types.CallbackQuery):
     
     text = """
-    Что Вам подсказать?"""
+Что Вам подсказать?"""
     
     try:
         await callback.message.edit_text(
@@ -1131,7 +1131,7 @@ async def routes_fam_food(callback: types.CallbackQuery):
 async def routes_fam_break(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1148,7 +1148,7 @@ async def routes_fam_break(callback: types.CallbackQuery):
 async def routes_fam_lun(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1165,7 +1165,7 @@ async def routes_fam_lun(callback: types.CallbackQuery):
 async def routes_fam_din(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1182,7 +1182,7 @@ async def routes_fam_din(callback: types.CallbackQuery):
 async def routes_fam_cof(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1280,12 +1280,12 @@ async def routes_fam_shop(callback: types.CallbackQuery):
 async def routes_fri_tran(callback: types.CallbackQuery):
     
     text = """
-    <b>💡 Совет от Бро Бота: </b>
-    Помните, если хотите комфорт и безопасность, выбирайте такси через агрегатор (Bolt, Uber) или  <b><u>красный автобус</u></b>
+<b>💡 Совет от Бро Бота: </b>
+Помните, если хотите комфорт и безопасность, выбирайте такси через агрегатор (Bolt, Uber) или  <b><u>красный автобус</u></b>
     
-    <i>*Помните общественный транспорт для местных</i>
+<i>*Помните общественный транспорт для местных</i>
     
-    Что вас больше всего интересует?"""
+Что вас больше всего интересует?"""
     
     try:
         await callback.message.edit_text(
@@ -1302,11 +1302,11 @@ async def routes_fri_tran(callback: types.CallbackQuery):
 async def routes_fri_nat(callback: types.CallbackQuery):
     
     text = """
-    Из природных мест в Кейптауне есть парки, горы, водопады, хайки
+Из природных мест в Кейптауне есть парки, горы, водопады, хайки
 
-    В путеводителе по Кейптауну  несколько страниц посвящено природным местам
+В путеводителе по Кейптауну  несколько страниц посвящено природным местам
 
-    <b>Выберите, что интересно:</b>"""
+<b>Выберите, что интересно:</b>"""
     
     try:
         await callback.message.edit_text(
@@ -1323,7 +1323,7 @@ async def routes_fri_nat(callback: types.CallbackQuery):
 async def routes_fri_food(callback: types.CallbackQuery):
     
     text = """
-    Что Вам подсказать?"""
+Что Вам подсказать?"""
     
     try:
         await callback.message.edit_text(
@@ -1340,7 +1340,7 @@ async def routes_fri_food(callback: types.CallbackQuery):
 async def routes_fri_break(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1357,7 +1357,7 @@ async def routes_fri_break(callback: types.CallbackQuery):
 async def routes_fri_lun(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1374,7 +1374,7 @@ async def routes_fri_lun(callback: types.CallbackQuery):
 async def routes_fri_din(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1391,7 +1391,7 @@ async def routes_fri_din(callback: types.CallbackQuery):
 async def routes_fri_cof(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1418,7 +1418,7 @@ async def routes_fri_ani(callback: types.CallbackQuery):
 🐦 Для наблюдения за птицами стоит заглянуть в <b>Rondevlei Nature Reserve</b> — десятки видов водоплавающих и красивые маршруты по настилам
 🦈 Хочется больше адреналина? Попробуйте снорклинг с тюленями в Hout Bay или сафари-поездку в <b>Aquila Reserve</b> — эмоций хватит надолго
 
-    Больше локаций, фото и маршрутов — в <b>Путеводителе по Кейптауну</b>"""
+Больше локаций, фото и маршрутов — в <b>Путеводителе по Кейптауну</b>"""
     
     try:
         await callback.message.edit_text(
@@ -1537,7 +1537,7 @@ async def routes_fri_bars(callback: types.CallbackQuery):
 async def routes_fri_him(callback: types.CallbackQuery):
     
     text = """
-    Что вас больше всего интересует?"""
+Что вас больше всего интересует?"""
     
     try:
         await callback.message.edit_text(
@@ -1554,11 +1554,11 @@ async def routes_fri_him(callback: types.CallbackQuery):
 async def routes_fri_him_nat(callback: types.CallbackQuery):
     
     text = """
-    Из природных мест в Кейптауне есть парки, горы, водопады, хайки
+Из природных мест в Кейптауне есть парки, горы, водопады, хайки
 
-    В путеводителе по Кейптауну  несколько страниц посвящено природным местам
+В путеводителе по Кейптауну  несколько страниц посвящено природным местам
 
-    <b>Выберите, что интересно:</b>"""
+<b>Выберите, что интересно:</b>"""
     
     try:
         await callback.message.edit_text(
@@ -1575,7 +1575,7 @@ async def routes_fri_him_nat(callback: types.CallbackQuery):
 async def routes_fri_him_food(callback: types.CallbackQuery):
     
     text = """
-    Что Вам подсказать?"""
+Что Вам подсказать?"""
     
     try:
         await callback.message.edit_text(
@@ -1592,7 +1592,7 @@ async def routes_fri_him_food(callback: types.CallbackQuery):
 async def routes_fri_him_break(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1609,7 +1609,7 @@ async def routes_fri_him_break(callback: types.CallbackQuery):
 async def routes_fri_him_lun(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1626,7 +1626,7 @@ async def routes_fri_him_lun(callback: types.CallbackQuery):
 async def routes_fri_him_din(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
@@ -1643,7 +1643,7 @@ async def routes_fri_him_din(callback: types.CallbackQuery):
 async def routes_fri_him_cof(callback: types.CallbackQuery):
     
     text = """
-    В каком районе остановились?"""
+В каком районе остановились?"""
     
     try:
         await callback.message.edit_text(
